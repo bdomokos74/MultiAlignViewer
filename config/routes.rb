@@ -1,4 +1,9 @@
 FirstProject::Application.routes.draw do
+  get "static_pages/alignment"
+
+  resources :global_params
+
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
