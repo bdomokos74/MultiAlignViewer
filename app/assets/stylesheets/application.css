@@ -12,7 +12,115 @@
  *= require_tree .
  */
 
-div.sequence {
+
+.header {
+    width: 100%;
+    position: fixed;
+    top: 0px;
+    background-color: white;
+}
+.content {
+    position: absolute;
+}
+#placeholder {
+    height: 90px;
+}
+.sequence {
     font-size: 16px;
     font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+    white-space: pre;
+    /*line-height: 2px;*/
+    text-align: left;
+}
+
+#col1 {
+    float: left;
+    background-color: lightblue;
+    width: 50px;
+}
+#col2 {
+    float: right;
+}
+#col2_1 {
+    float: left;
+    background-color: lightgreen;
+    width: 372px;
+}
+#col2_2 {
+    float: right;
+}
+#col2_2_1 {
+    float: left;
+    background-color: lightblue;
+    width: 50px;
+}
+#col2_2_2 {
+    float: right;
+}
+
+#col2_2_2_1 {
+    float: left;
+    background-color: lightgreen;
+    width: 372px;
+}
+#col2_2_2_2 {
+    float: right;
+
+}
+#col2_2_2_2_1 {
+    float: left;
+    background-color: lightblue;
+    width: 50px;
+}
+#col2_2_2_2_2 {
+    float: right;
+}
+#col2_2_2_2_2_1 {
+    float: left;
+    background-color: lightgreen;
+    width: 372px;
+}
+#col2_2_2_2_2_2 {
+    float: right;
+}
+#col2_2_2_2_2_2_1 {
+    float: left;
+    background-color: lightblue;
+    width: 50px;
+}
+#col2_2_2_2_2_2_2 {
+    float: right;
+    background-color: lightgreen;
+    width: 372px;
+}
+
+.exon span {
+    white-space: pre;
+}
+.exon_1 {
+    background-color: #6495ed;
+}
+.exon_2 {
+    background-color: #ffcc00;
+}
+.exon_3 {
+    background-color: #ff7f50;
+}
+.exon_4 {
+    background-color: #ffcccc;
+}
+.exon_5 {
+    background-color: green;
+}
+.exon_6 {
+    background-color: yellow;
+}
+.exon_7 {
+    background-color: #4682b4;
+}
+.exon_8 {
+    background-color: #ff6347;
+}
+.no-exon {
+    background-color: #ffffff;
 }

@@ -1,4 +1,69 @@
-<h1>StaticPages#alignment</h1>
-<div class="sequence"><%= @match_line %></div>
-<div class="sequence"><%= @seq0 %></div>
-<div class="sequence"><%= @seq1 %></div>
+<div>
+
+    <div class="header">
+        <h1><%= @title %></h1>
+        <div class="exon">
+        Exon1 <span class="exon_1">                 </span>
+        Exon2 <span class="exon_2">                 </span>
+        Exon3 <span class="exon_3">                 </span>
+        Exon4 <span class="exon_4">                 </span>
+        Exon5 <span class="exon_5">                 </span>
+        Exon6 <span class="exon_6">                 </span>
+        Exon7 <span class="exon_7">                 </span>
+        </div>
+    </div>
+
+    <div id="placeholder">
+    </div>
+
+    <!--<div class="sequence">-->
+        <!--<%= @match_line %>-->
+    <!--</div>-->
+    <!--<br/>-->
+    <div class="content">
+        <div id="col1">
+            <div class="sequence">xxx</div>
+        </div>
+        <div id="col2">
+            <div id="col2_1">
+                <div class="sequence"><%= @seq0 %></div>
+            </div>
+            <div id="col2_2">
+                <div id="col2_2_1">
+                    <div class="sequence">2_2_1</div>
+                </div>
+                <div id="col2_2_2">
+                    <div id="col2_2_2_1">
+                        <div class="sequence"><%= @seq1 %></div>
+                    </div>
+                    <div id="col2_2_2_2">
+                        <div id="col2_2_2_2_1">
+                            <div class="sequence">yyy</div>
+
+                        </div>
+                        <div id="col2_2_2_2_2">
+                            <div id="col2_2_2_2_2_1">
+                                <div class="sequence"><%= @seq1 %></div>
+                            </div>
+                            <div id="col2_2_2_2_2_2">
+                                <div id="col2_2_2_2_2_2_1">
+                                    <div class="sequence">zzz</div>
+                                </div>
+                                <div id="col2_2_2_2_2_2_2">
+                                    <div class="sequence"><%= @seq1 %></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br/>
+
+        <!--<div class="sequence">-->
+            <!--<%= render "layouts/exons" %>-->
+        <!--</div>-->
+        <br/>
+    </div>
+</div>

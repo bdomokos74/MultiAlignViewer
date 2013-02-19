@@ -20,11 +20,4 @@ ActiveRecord::Schema.define(:version => 20130207001908) do
     t.datetime "updated_at", :null => false
   end
 
-  create_table "params", :force => true do |t|
-    t.string   "key"
-    t.string   "value"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
 end
