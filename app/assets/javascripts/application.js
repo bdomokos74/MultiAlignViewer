@@ -14,7 +14,15 @@
 //= require jquery_ujs
 //= require_tree .
 
-
-$(document).ready(function(){
-    $("#e1").addClass("exon1")
-})
+//$.ajaxSetup({
+//    cache: false
+//});
+//$(document).ready(function() {
+//    $.ajax({
+//            url: "/sequences/show.json?id=0",
+//            type: 'GET',
+//            dataType: 'text',
+//            success: function(data, txt, hdr) { alert(data)},
+//            error: function(data, textstat, err) { alert(err) ;}
+//    });
+//});

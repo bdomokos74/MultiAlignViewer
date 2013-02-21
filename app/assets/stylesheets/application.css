@@ -18,63 +18,78 @@
     position: fixed;
     top: 0px;
     background-color: white;
+    background-repeat: repeat;
+    z-index: 100;
 }
 .content {
     position: absolute;
 }
+
+.hidden {
+    visibility: hidden;
+}
 #placeholder {
-    height: 90px;
+    height: 60px;
 }
 .sequence {
     font-size: 16px;
     font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
-    white-space: pre;
+    /*white-space: pre;*/
     /*line-height: 2px;*/
     text-align: left;
 }
 
+.ctrl {
+    background-color: #f0f0f0;
+}
+
+/* ctl1*/
 #col1 {
     float: left;
-    background-color: lightblue;
+    /*background-color: lightblue;*/
     width: 50px;
 }
 #col2 {
     float: right;
 }
+/*panel 1*/
 #col2_1 {
     float: left;
-    background-color: lightgreen;
+    /*background-color: lightgreen;*/
     width: 372px;
 }
 #col2_2 {
     float: right;
 }
+/*ctl 2*/
 #col2_2_1 {
     float: left;
-    background-color: lightblue;
+    /*background-color: lightblue;*/
     width: 50px;
 }
 #col2_2_2 {
     float: right;
 }
-
+/*panel 2*/
 #col2_2_2_1 {
     float: left;
-    background-color: lightgreen;
+    /*background-color: lightgreen;*/
     width: 372px;
 }
 #col2_2_2_2 {
     float: right;
 
 }
+/*ctl 3*/
 #col2_2_2_2_1 {
     float: left;
-    background-color: lightblue;
+    /*background-color: lightblue;*/
     width: 50px;
 }
 #col2_2_2_2_2 {
     float: right;
 }
+/*panel 3*/
 #col2_2_2_2_2_1 {
     float: left;
     background-color: lightgreen;
@@ -83,19 +98,43 @@
 #col2_2_2_2_2_2 {
     float: right;
 }
+/*ctl 4*/
 #col2_2_2_2_2_2_1 {
     float: left;
-    background-color: lightblue;
+    /*background-color: lightblue;*/
     width: 50px;
 }
+/*panel 4*/
 #col2_2_2_2_2_2_2 {
     float: right;
-    background-color: lightgreen;
+    /*background-color: lightgreen;*/
     width: 372px;
 }
 
+.nuc-matching {
+    background-color: #90ee90;
+}
+.nuc-warning {
+    background-color: red;
+}
+.nuc-bg {
+    background-color: #fff5ee;
+}
 .exon span {
     white-space: pre;
+}
+.labels {
+    background-color: #f0f0f0;
+}
+.labels span {
+    white-space: pre;
+    font-size: 16px;
+    font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+}
+.table_hdr {
+    width: 368px;
+    overflow: hidden;
+    padding-left: 50px;
 }
 .exon_1 {
     background-color: #6495ed;

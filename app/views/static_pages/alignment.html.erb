@@ -1,7 +1,6 @@
+<%provide(:title, @title) %>
 <div>
-
     <div class="header">
-        <h1><%= @title %></h1>
         <div class="exon">
         Exon1 <span class="exon_1">                 </span>
         Exon2 <span class="exon_2">                 </span>
@@ -11,9 +10,22 @@
         Exon6 <span class="exon_6">                 </span>
         Exon7 <span class="exon_7">                 </span>
         </div>
+        <br/>
+        <div class="labels">
+            <table>
+                <tr>
+                    <td class="table_hdr"><span id="seqname_1">ABC</span></td>
+                    <td class="table_hdr"><span id="seqname_2">ABC</span></td>
+                    <td class="table_hdr"><span id="seqname_3">ABC</span></td>
+                    <td class="table_hdr"><span id="seqname_4">ABC</span></td>
+                </tr>
+            </table>
+        </div>
     </div>
-
     <div id="placeholder">
+        <div id="rownum_var" class="hidden"></div>
+        <div id="position_bar_inited" class="hidden">false</div>
+        <div id="result_panel_inited" class="hidden">false</div>
     </div>
 
     <!--<div class="sequence">-->
@@ -21,36 +33,35 @@
     <!--</div>-->
     <!--<br/>-->
     <div class="content">
-        <div id="col1">
-            <div class="sequence">xxx</div>
+        <div id="col1" class="ctrl">
+            <div id="position_bar" class="sequence"></div>
         </div>
         <div id="col2">
             <div id="col2_1">
-                <div class="sequence"><%= @seq0 %></div>
+                <div id="panel_1" class="sequence"></div>
             </div>
             <div id="col2_2">
                 <div id="col2_2_1">
-                    <div class="sequence">2_2_1</div>
+                    <div id="control_1" class="sequence">2_2_1</div>
                 </div>
                 <div id="col2_2_2">
                     <div id="col2_2_2_1">
-                        <div class="sequence"><%= @seq1 %></div>
+                        <div id="panel_2" class="sequence"></div>
                     </div>
                     <div id="col2_2_2_2">
                         <div id="col2_2_2_2_1">
-                            <div class="sequence">yyy</div>
-
+                            <div id="control_2" class="sequence">yyy</div>
                         </div>
                         <div id="col2_2_2_2_2">
                             <div id="col2_2_2_2_2_1">
-                                <div class="sequence"><%= @seq1 %></div>
+                                <div id="panel_3" class="sequence"></div>
                             </div>
                             <div id="col2_2_2_2_2_2">
                                 <div id="col2_2_2_2_2_2_1">
-                                    <div class="sequence">zzz</div>
+                                    <div id="control_3" class="sequence">zzz</div>
                                 </div>
                                 <div id="col2_2_2_2_2_2_2">
-                                    <div class="sequence"><%= @seq1 %></div>
+                                    <div id="result_panel" class="sequence"></div>
                                 </div>
                             </div>
                         </div>
