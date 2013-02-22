@@ -5,6 +5,7 @@
 
 $.ajaxSetup cache: false
 matching_rows = []
+inserted_rows = []
 colsize = 37
 emptyrow = "<span>&nbsp;</span>"
 
@@ -13,10 +14,10 @@ setSeq= (data, panelnum) ->
     seq = data[1]
     seqname = data[0]
     matchline = data[2]
-    target = "\#panel_#{panelnum}"
 
     [result, nrow] = create_markup(seq, matchline, panelnum)
-    $(target).html(result)
+    console.log inserted_rows
+    $("\#panel_#{panelnum}").html(result)
     $("#rownum_var").text(nrow)
 
     if $("#position_bar_inited").text() == "false"
@@ -31,22 +32,11 @@ setSeq= (data, panelnum) ->
 
     color_matching(seq, matchline, panelnum)
 
-    # create control bars
-    control_str = ""
-    for i in [0..(nrow-1)]
-      control_str += "<div><span id=\"copy_#{panelnum}_#{i}\">\>\></div>"
-    $("\#control_#{panelnum}").html(control_str)
-
-    for i in [0..(nrow-1)]
-      $("\#copy_#{panelnum}_#{i}").click ->
-        curr_row = @id.replace /.*_/, ""
-        console.log "#{@id} clicked, curr_row=#{curr_row}"
-        $("#result_#{curr_row}").html($("\#panel_#{panelnum}_row_#{curr_row}").html())
+    create_and_set_control_bar(nrow, panelnum)
 
     # set panel names
     $("\#seqname_#{panelnum}").html(seqname)
 
-    copy_matching()
 
 create_markup= (seq, matchline, panelnum) ->
   nrow = 0
@@ -56,12 +46,20 @@ create_markup= (seq, matchline, panelnum) ->
     result = result + "<span id=\"panel_#{panelnum}_nuc_#{index}\">#{ch}</span>"
     chars_in_row += 1
     if (chars_in_row % colsize is 0) or should_split_row(seq, matchline, index)
-      if matchline[(index-chars_in_row+1)..index] ==Array(chars_in_row+1).join("*")
+      if matchline[(index-chars_in_row+1)..index] == Array(chars_in_row+1).join("*")
         matching_rows[nrow] = true
       else
         matching_rows[nrow] = false
-      result = result + "</div><div id=\"panel_#{panelnum}_row_#{nrow}\">"
+      if panelnum==1
+        if seq[(index-chars_in_row+1)..index] == Array(chars_in_row+1).join("-")
+          inserted_rows[nrow] = true
+        else
+          inserted_rows[nrow] = false
+      if panelnum == 2
+        if seq[(index-chars_in_row+1)..index] == Array(chars_in_row+1).join("-")
+          inserted_rows[nrow] = true
       nrow += 1
+      result = result + "</div><div id=\"panel_#{panelnum}_row_#{nrow}\">"
       chars_in_row = 0
   result += "</div>"
   [result, nrow]
@@ -71,16 +69,21 @@ color_matching= (seq, matchline, panelnum) ->
   for i in [0..(match_arr.length-1)]
     if match_arr[i] is '*'
       $("\#panel_#{panelnum}_nuc_#{i}").addClass("nuc-matching")
+    else
+      if panelnum ==1
+        $("\#panel_#{panelnum}_nuc_#{i}").addClass("panel_1_col")
+      else if panelnum ==2
+        $("\#panel_#{panelnum}_nuc_#{i}").addClass("panel_2_col")
 
 copy_matching= () ->
-  for i in [0..(matching_rows.length-1)]
-    if matching_rows[i]
-      $("#result_#{i}").html($("#panel_1_row_#{i}").html())
+  for i in [0..(matching_rows.length)]
+    if not inserted_rows[i]
+      $("#result_#{i}").html($("#panel_2_row_#{i}").html())
 
 create_position_bar= (nrow) ->
   position_str = ""
   for i in [0..(nrow)]
-    position_str += "<div>#{i*colsize}</div>\n"
+    position_str += "<div class=\"exon_bar\">#{i*colsize}<span class=\"exon_1\"> </span></div>\n"
   position_str
 
 create_result_panel= (nrow) ->
@@ -89,6 +92,17 @@ create_result_panel= (nrow) ->
     result_panel += "<div id=\"result_#{i}\">#{emptyrow}</div>"
   result_panel
 
+create_and_set_control_bar= (nrow, panelnum) ->
+  control_str = ""
+  for i in [0..(nrow)]
+    control_str += "<div><span id=\"copy_#{panelnum}_#{i}\">\>\></div>"
+  $("\#control_#{panelnum}").html(control_str)
+
+  for i in [0..(nrow)]
+    $("\#copy_#{panelnum}_#{i}").click ->
+      curr_row = @id.replace /.*_/, ""
+      console.log "#{@id} clicked, curr_row=#{curr_row}"
+      $("#result_#{curr_row}").html($("\#panel_#{panelnum}_row_#{curr_row}").html())
 
 should_split_row= (seq, match, index) ->
   return( (match[index] == ' ' and match[(index+1)..(index+37)] == Array(38).join("*")) or
@@ -100,8 +114,11 @@ $(document).ready ->
       url: "/sequences/0.json"
       success: (x) -> setSeq(x, 1, "#panel_1")
       error: (data, txtstat, err) -> console.log err
+      async: false
     $.ajax
       url: "/sequences/1.json"
       success: (x) -> setSeq(x, 2, "#panel_2")
       error: (data, txtstat, err) -> console.log err
+      async: false
 
+    copy_matching()

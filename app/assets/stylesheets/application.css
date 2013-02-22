@@ -43,11 +43,14 @@
     background-color: #f0f0f0;
 }
 
+
+
+
 /* ctl1*/
 #col1 {
     float: left;
     /*background-color: lightblue;*/
-    width: 50px;
+    width: 60px;
 }
 #col2 {
     float: right;
@@ -132,10 +135,26 @@
     font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
 }
 .table_hdr {
-    width: 368px;
+    width: 362px;
     overflow: hidden;
-    padding-left: 50px;
+    padding-left: 58px;
 }
+.exon_bar {
+    text-align: right;
+}
+.exon_bar span {
+    white-space: pre;
+}
+.panel_1_col {
+    background-color: #fff8dc;
+}
+.panel_2_col {
+    background-color: #ffe4e1;
+}
+.panel_3_col {
+    background-color: #ffcc00;
+}
+
 .exon_1 {
     background-color: #6495ed;
 }

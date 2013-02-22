@@ -1,0 +1,2 @@
+class ExonsController < ApplicationController
+end
