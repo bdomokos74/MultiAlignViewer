@@ -95,9 +95,9 @@ class MultiAlignAnnotator
         end
         curr_aligned_pos += 1
       end
-      gapped_feature = OpenStruct.new(:name => "exon_#{curr_feature+1}",
+      gapped_feature = {:name => "exon_#{curr_feature+1}",
                                       :start => start_pos,
-                                      :end => curr_aligned_pos)
+                                      :end => curr_aligned_pos}
       result << gapped_feature
       curr_feature += 1
       start_pos = curr_aligned_pos

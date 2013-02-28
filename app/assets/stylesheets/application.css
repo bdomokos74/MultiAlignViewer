@@ -28,6 +28,9 @@
 .hidden {
     visibility: hidden;
 }
+.visible {
+    visibility: visible;
+}
 #placeholder {
     height: 60px;
 }
@@ -64,7 +67,7 @@
 #col2_2 {
     float: right;
 }
-/*ctl 2*/
+/*ctl 1*/
 #col2_2_1 {
     float: left;
     /*background-color: lightblue;*/
@@ -83,7 +86,7 @@
     float: right;
 
 }
-/*ctl 3*/
+/*ctl 2*/
 #col2_2_2_2_1 {
     float: left;
     /*background-color: lightblue;*/
@@ -101,19 +104,31 @@
 #col2_2_2_2_2_2 {
     float: right;
 }
-/*ctl 4*/
+/*ctl 3*/
 #col2_2_2_2_2_2_1 {
     float: left;
     /*background-color: lightblue;*/
     width: 50px;
 }
-/*panel 4*/
+
 #col2_2_2_2_2_2_2 {
     float: right;
-    /*background-color: lightgreen;*/
+}
+/*panel 4*/
+#col2_2_2_2_2_2_2_1 {
+    float: left;
+    /*background-color: lightblue;*/
     width: 372px;
 }
+#col2_2_2_2_2_2_2_2 {
+    float: right;
+    /*background-color: lightgreen;*/
+    width: 50px;
+}
 
+#footer {
+    clear: both;
+}
 .nuc-matching {
     background-color: #90ee90;
 }
@@ -126,25 +141,30 @@
 .exon span {
     white-space: pre;
 }
+
 .labels {
     background-color: #f0f0f0;
 }
+
 .labels span {
     white-space: pre;
     font-size: 16px;
     font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
 }
+
 .table_hdr {
     width: 362px;
     overflow: hidden;
     padding-left: 58px;
 }
+
 .exon_bar {
     text-align: right;
 }
 .exon_bar span {
     white-space: pre;
 }
+
 .panel_1_col {
     background-color: #fff8dc;
 }
@@ -181,4 +201,18 @@
 }
 .no-exon {
     background-color: #ffffff;
+}
+
+#result_box {
+    width: 1200px;
+    height: 600px;
+    position: fixed;
+    top: 100px;
+    left: 200px;
+    background-color: #fff8dc;
+    z-index: 100;
+}
+
+#result_nuc {
+    margin: 16px;
 }

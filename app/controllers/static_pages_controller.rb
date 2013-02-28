@@ -3,11 +3,13 @@ require 'multialign_annotator'
 class StaticPagesController < ApplicationController
   def alignment
     data_dir = "/data/projects/AnalysisTools/projects/richter_cho/06_contract_MS1/data/multi"
-    aln = "actb_tcons_696_mmu.aln"
+    #aln_file = "actb_tcons_696_mmu.aln"
+
+    aln_file = "actb_multi_696_consensus.aln"
     exon_gtf = "TCONS_00000696.gtf"
     seqid = "TCONS_00000696"
 
-    aln = Bio::ClustalW::Report.new(File.read(File.join(data_dir, aln)))
+    aln = Bio::ClustalW::Report.new(File.read(File.join(data_dir, aln_file)))
     @match_line = aln.match_line
     @seq0 = wrap(aln.get_sequence(0).to_s)
 
