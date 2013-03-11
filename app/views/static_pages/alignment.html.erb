@@ -9,15 +9,22 @@
         Exon5 <span class="exon_5">                 </span>
         Exon6 <span class="exon_6">                 </span>
         Exon7 <span class="exon_7">                 </span>
+        <span id="diff_color"> D</span>
         </div>
         <br/>
         <div class="labels">
-            <table>
+            <table >
                 <tr>
                     <td class="table_hdr"><span id="seqname_1">ABC</span><span class="panel_1_col">       </span></td>
                     <td class="table_hdr"><span id="seqname_2">ABC</span><span class="panel_2_col">       </span></td>
                     <td class="table_hdr"><span id="seqname_3">ABC</span><span class="panel_3_col">       </span></td>
-                    <td class="table_hdr"><span id="seqname_4">Result</span></td>
+                    <td class="table_hdr"><span id="seqname_4">Result </span></td>
+                </tr>
+                <tr id="menu_line">
+                    <td class="table_hdr"><span id="orf1_col1">1 </span><span id="orf2_col1">2 </span> <span id="orf3_col1">3</span></td>
+                    <td class="table_hdr"><span id="orf1_col2">1 </span><span id="orf2_col2">2 </span> <span id="orf3_col2">3</span></td>
+                    <td class="table_hdr"><span id="orf1_col3">1 </span><span id="orf2_col3">2 </span> <span id="orf3_col3">3</span></td>
+                    <td class="table_hdr"><span id="orf1_result">1 </span><span id="orf2_result">2 </span> <span id="orf3_result">3</span><span id="save_txt"> S</span><span id="search_txt_result"> s</span></td>
                 </tr>
             </table>
         </div>
@@ -50,7 +57,7 @@
                     </div>
                     <div id="col2_2_2_2">
                         <div id="col2_2_2_2_1">
-                            <div id="control_2" class="sequence">yyy</div>
+                            <div id="control_2" class="sequence">   </div>
                         </div>
                         <div id="col2_2_2_2_2">
                             <div id="col2_2_2_2_2_1">
@@ -58,14 +65,14 @@
                             </div>
                             <div id="col2_2_2_2_2_2">
                                 <div id="col2_2_2_2_2_2_1">
-                                    <div id="control_3" class="sequence">zzz</div>
+                                    <div id="control_3" class="sequence">   </div>
                                 </div>
                                 <div id="col2_2_2_2_2_2_2">
                                     <div id="col2_2_2_2_2_2_2_1">
                                         <div id="result_panel" class="sequence"></div>
                                     </div>
                                     <div id="col2_2_2_2_2_2_2_2">
-                                        <div id="control_4" class="sequence">www</div>
+                                        <div id="control_4" class="sequence">   </div>
                                     </div>
                                 </div>
                             </div>
@@ -78,7 +85,7 @@
                 <br/>
                 <br/>
 
-                <div id="save_txt">Save result</div>
+
 
                 <br/>
                 <br/>
@@ -87,6 +94,21 @@
             <div id="result_box" class="hidden">
                 <div id="result_nuc" class="sequence">
 
+                </div>
+            </div>
+            <div id="nuc_switcher" class="hidden">
+                <div id="nuc_switcher_main" class="sequence">
+                    <div>
+                        <span id="switch_A"> A</span><span id="switch_T"> T</span><span id="switch_C"> C</span><span id="switch_G"> G</span><span id="switch_gap"> -</span><span id="switch_close"> Close</span>
+                    </div>
+                </div>
+            </div>
+            <div id="search_box" class="hidden">
+                <div id="search_form" class="sequence">
+                    <input id="search_input" />
+                    <span id="search_go">Search</span>
+                    <span id="search_clear">Clear</span>
+                    <span id="search_close">Close</span>
                 </div>
             </div>
         </div>

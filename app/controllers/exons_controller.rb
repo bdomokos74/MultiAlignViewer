@@ -1,18 +1,21 @@
 require 'multialign_annotator'
+require 'json'
 
 class ExonsController < ApplicationController
 
   def show
-    data_dir = "/data/projects/AnalysisTools/projects/richter_cho/06_contract_MS1/data/multi"
-    aln_file = "actb_tcons_696_mmu.aln"
-    exon_gtf = "TCONS_00000696.gtf"
-    seqid = "TCONS_00000696"
+    config_json = File.read(File.join(ENV["HOME"], "multialn_cfg.json"))
+    params = JSON.parse(config_json)
 
-    aln = Bio::ClustalW::Report.new(File.read(File.join(data_dir, aln_file)))
-    gtf = Bio::GFF.new(File.open(File.join(data_dir, exon_gtf)))
-    ref_seq = aln.alignment[seqid]
+    aln = Bio::ClustalW::Report.new(File.read(File.join(params["data_dir"], params["aln_file"])))
+    gtf = Bio::GFF.new(File.open(File.join(params["data_dir"], params["exon_gtf"])))
+    ref_seq = aln.alignment[params["seqid"]]
 
-    exons = MultiAlignAnnotator.new().create_gapped_features(ref_seq, gtf.records)
+    records = gtf.records
+    if params["reverse"]
+      records.reverse!
+    end
+    exons = MultiAlignAnnotator.new().create_gapped_features(ref_seq, records)
     respond_to do |format|
       format.json { render json: exons.to_json }
     end

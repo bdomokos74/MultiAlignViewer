@@ -2,24 +2,20 @@ require 'multialign_annotator'
 
 class StaticPagesController < ApplicationController
   def alignment
-    data_dir = "/data/projects/AnalysisTools/projects/richter_cho/06_contract_MS1/data/multi"
-    #aln_file = "actb_tcons_696_mmu.aln"
+    config_json = File.read(File.join(ENV["HOME"], "multialn_cfg.json"))
+    params = JSON.parse(config_json)
 
-    aln_file = "actb_multi_696_consensus.aln"
-    exon_gtf = "TCONS_00000696.gtf"
-    seqid = "TCONS_00000696"
-
-    aln = Bio::ClustalW::Report.new(File.read(File.join(data_dir, aln_file)))
+    aln = Bio::ClustalW::Report.new(File.read(File.join(params["data_dir"], params["aln_file"])))
     @match_line = aln.match_line
     @seq0 = wrap(aln.get_sequence(0).to_s)
 
     @seq1 = wrap(aln.get_sequence(1).to_s)
-    @title = "Actb - TCONS000000696 vs MMU"
+    @title = ""
 
-    gtf = Bio::GFF.new(File.open(File.join(data_dir, exon_gtf)))
+    gtf = Bio::GFF.new(File.open(File.join(params["data_dir"], params["exon_gtf"])))
     #exons = gtf.records.select { |rec| rec.attributes["transcript_id"].gsub("\"", "") == seqid }
 
-    ref_seq = aln.alignment[seqid]
+    ref_seq = aln.alignment[params["seqid"]]
     @aln_len = ref_seq.length
 
     @exons = MultiAlignAnnotator.new().create_gapped_features(ref_seq, gtf.records)

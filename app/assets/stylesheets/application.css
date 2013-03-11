@@ -32,7 +32,7 @@
     visibility: visible;
 }
 #placeholder {
-    height: 60px;
+    height: 80px;
 }
 .sequence {
     font-size: 16px;
@@ -47,12 +47,9 @@
 }
 
 
-
-
 /* ctl1*/
 #col1 {
     float: left;
-    /*background-color: lightblue;*/
     width: 60px;
 }
 #col2 {
@@ -61,7 +58,6 @@
 /*panel 1*/
 #col2_1 {
     float: left;
-    /*background-color: lightgreen;*/
     width: 372px;
 }
 #col2_2 {
@@ -70,7 +66,6 @@
 /*ctl 1*/
 #col2_2_1 {
     float: left;
-    /*background-color: lightblue;*/
     width: 50px;
 }
 #col2_2_2 {
@@ -79,7 +74,6 @@
 /*panel 2*/
 #col2_2_2_1 {
     float: left;
-    /*background-color: lightgreen;*/
     width: 372px;
 }
 #col2_2_2_2 {
@@ -89,7 +83,6 @@
 /*ctl 2*/
 #col2_2_2_2_1 {
     float: left;
-    /*background-color: lightblue;*/
     width: 50px;
 }
 #col2_2_2_2_2 {
@@ -98,7 +91,6 @@
 /*panel 3*/
 #col2_2_2_2_2_1 {
     float: left;
-    background-color: lightgreen;
     width: 372px;
 }
 #col2_2_2_2_2_2 {
@@ -107,7 +99,6 @@
 /*ctl 3*/
 #col2_2_2_2_2_2_1 {
     float: left;
-    /*background-color: lightblue;*/
     width: 50px;
 }
 
@@ -117,12 +108,10 @@
 /*panel 4*/
 #col2_2_2_2_2_2_2_1 {
     float: left;
-    /*background-color: lightblue;*/
     width: 372px;
 }
 #col2_2_2_2_2_2_2_2 {
     float: right;
-    /*background-color: lightgreen;*/
     width: 50px;
 }
 
@@ -169,10 +158,29 @@
     background-color: #fff8dc;
 }
 .panel_2_col {
-    background-color: #ffe4e1;
+    background-color: #ffcc00;
 }
 .panel_3_col {
-    background-color: #ffcc00;
+    background-color: #ffe4e1;
+}
+
+.codon_start_col {
+    background-color: #90ee90;
+}
+.codon_stop_col {
+    background-color: #ff6347;
+}
+.signal_col {
+    background-color: #00bfff;
+}
+.search_col {
+    background-color: aqua;
+}
+.modified_col {
+    background-color: #ff0000;
+}
+.menusel_col {
+    background-color: #888888;
 }
 
 .exon_1 {
@@ -214,5 +222,33 @@
 }
 
 #result_nuc {
+    margin: 16px;
+}
+
+#nuc_switcher {
+    width: 200px;
+    height: 60px;
+    position: fixed;
+    top: 300px;
+    left: 1120px;
+    background-color: #fff8dc;
+    z-index: 100;
+}
+
+#nuc_switcher_main {
+    margin: 16px;
+}
+
+#search_box {
+    width: 260px;
+    height: 60px;
+    position: fixed;
+    top: 300px;
+    left: 1030px;
+    background-color: #fff8dc;
+    z-index: 100;
+}
+
+#search_form {
     margin: 16px;
 }
