@@ -41,8 +41,8 @@ getExons= (e) ->
   console.log "getExons called"
   exons = e
 
-setSeq= (seq, panelnum, seqname) ->
-  [result, nrow] = create_markup(seq, matchline, panelnum)
+setSeq= (seq, panelnum, seqname, exon_seq) ->
+  [result, nrow] = create_markup(seq, matchline, panelnum, exon_seq)
   $("\#panel_#{panelnum}").html(result)
   $("#rownum_var").text(nrow)
 
@@ -58,14 +58,18 @@ setSeq= (seq, panelnum, seqname) ->
   # set panel names
   $("\#seqname_#{panelnum}").html(seqname)
 
-create_markup= (seq, matchline, panelnum) ->
+create_markup= (seq, matchline, panelnum, exon_seq) ->
   nrow = 0
   chars_in_row = 0
+  nuc_in_row = 0
   result = "<div id=\"panel_#{panelnum}_row_0\">"
+  exon_pos = 0
   for ch, index in seq.split ""
     result = result + "<span id=\"panel_#{panelnum}_nuc_#{index}\">#{ch}</span>"
     chars_in_row += 1
-    if (chars_in_row % colsize is 0) or should_split_row(seq, matchline, index)
+    if ch!='-'
+      nuc_in_row += 1
+    if (chars_in_row % colsize is 0) or should_split_row(seq, matchline, index, exon_pos)
       if matchline[(index-chars_in_row+1)..index] == Array(chars_in_row+1).join("*")
         matching_rows[nrow] = true
       else
@@ -78,10 +82,14 @@ create_markup= (seq, matchline, panelnum) ->
       if panelnum == 2
         if seq[(index-chars_in_row+1)..index] == Array(chars_in_row+1).join("-")
           inserted_rows[nrow] = true
-      nuc_per_line[nrow] = chars_in_row
+      if panelnum==2
+        nuc_per_line[nrow] = nuc_in_row
       nrow += 1
       result = result + "</div><div id=\"panel_#{panelnum}_row_#{nrow}\">"
       chars_in_row = 0
+      nuc_in_row = 0
+    if exon_seq[index] != '-'
+      exon_pos += 1
   result += "</div>"
   [result, nrow]
 
@@ -171,7 +179,6 @@ copy_matching= () ->
   add_nuc_switcher()
 
 copy_row= (panel, rownum) ->
-  console.log "copy row called: #{panel}, #{rownum}"
   result = ""
   $("\#panel_#{panel}_row_#{rownum} span").each (i) ->
       id = $(this).attr("id").replace /.*nuc_/, ""
@@ -183,8 +190,9 @@ create_position_bar= (nrow) ->
   position_str = ""
   sum = 0
   curr_exon = 0
-  for i in [0..(nrow+1)]
-    position_str += "<div class=\"exon_bar\">#{sum}<span class=\"exon_#{curr_exon+1}\"> </span><span> </span></div>\n"
+
+  for i in [0..(nrow)]
+    position_str += "<div class=\"exon_bar\">#{sum+1}<span class=\"exon_#{curr_exon+1}\"> </span><span> </span></div>\n"
     sum += nuc_per_line[i]
     if sum > exons[curr_exon]["end"]
       curr_exon += 1
@@ -198,11 +206,11 @@ create_result_panel= (nrow) ->
 
 create_and_set_control_bar= (nrow, panelnum) ->
   control_str = ""
-  for i in [0..(nrow)]
+  for i in [0..(nrow-1)]
     control_str += "<div><span id=\"copy_#{panelnum}_#{i}\">\>\></div>"
   $("\#control_#{panelnum}").html(control_str)
 
-  for i in [0..(nrow)]
+  for i in [0..(nrow-1)]
     $("\#copy_#{panelnum}_#{i}").click ->
       curr_row = @id.replace /.*_/, ""
       console.log "#{@id} clicked, curr_row=#{curr_row}"
@@ -211,20 +219,20 @@ create_and_set_control_bar= (nrow, panelnum) ->
 
 create_and_set_delete_bar= (nrow, panelnum) ->
   control_str = ""
-  for i in [0..(nrow+1)]
+  for i in [0..(nrow)]
     control_str += "<div><span id=\"delete_4_#{i}\">x</span></div>"
   $("\#control_4").html(control_str)
 
-  for i in [0..(nrow+1)]
+  for i in [0..(nrow)]
     $("\#delete_4_#{i}").click ->
       curr_row = @id.replace /.*_/, ""
       console.log "#{@id} clicked, curr_row=#{curr_row}"
       $("\#result_#{curr_row}").html("")
 
-should_split_row= (seq, match, index) ->
+should_split_row= (seq, match, index, exon_pos) ->
   return( (match[index] == ' ' and match[(index+1)..(index+37)] == Array(38).join("*")) or
   (match[index] == '*' and match[(index+1)..(index+37)] == Array(38).join(" ")) or
-  index in exon_splits
+  exon_pos in exon_splits
   )
 
 create_exon_splits= () ->
@@ -347,6 +355,9 @@ show_nuc_switcher= (evt) ->
     $("#nuc_switcher").removeClass("visible")
     $("#nuc_switcher").addClass("hidden")
 
+toint= (str)->
+  parseInt(str, 10)
+
 color_changes= ()->
   for c in changes
     $(c[0]).text(c[1])
@@ -367,10 +378,10 @@ $(document).ready ->
 
   create_exon_splits()
 
-  setSeq(seq1, 1, seqname1)
-  setSeq(seq2, 2, seqname2)
+  setSeq(seq1, 1, seqname1, seq2)
+  setSeq(seq2, 2, seqname2, seq2)
   if seq3 != ""
-    setSeq(seq3, 3, seqname3)
+    setSeq(seq3, 3, seqname3, seq2)
 
   result = create_position_bar(nuc_per_line.length-1)
   $("#position_bar").html(result)
@@ -379,8 +390,22 @@ $(document).ready ->
 
   copy_matching()
 
-
   create_and_set_delete_bar(nuc_per_line.length-1, 4)
+
+  #save vars for offline page
+  $("#matchline").attr('val', matchline)
+  $("#start_pos_1").attr('val', start_positions[1])
+  $("#start_pos_2").attr('val', start_positions[2])
+  $("#start_pos_3").attr('val', start_positions[3])
+  $("#start_pos_4").attr('val', start_positions[4])
+
+  #restore
+  matchline = $("#matchline").attr('val');
+  start_positions[1] = toint($("#start_pos_1").attr('val'));
+  start_positions[2] = toint($("#start_pos_2").attr('val'));
+  start_positions[3] = toint($("#start_pos_3").attr('val'));
+  start_positions[4] = toint($("#start_pos_4").attr('val'));
+  console.log(start_positions);
 
   $("#save_txt").click =>
     show_result_seq()

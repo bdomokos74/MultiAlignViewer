@@ -5,21 +5,21 @@ class StaticPagesController < ApplicationController
     config_json = File.read(File.join(ENV["HOME"], "multialn_cfg.json"))
     params = JSON.parse(config_json)
 
-    aln = Bio::ClustalW::Report.new(File.read(File.join(params["data_dir"], params["aln_file"])))
-    @match_line = aln.match_line
-    @seq0 = wrap(aln.get_sequence(0).to_s)
+    #aln = Bio::ClustalW::Report.new(File.read(File.join(params["data_dir"], params["aln_file"])))
+    #@match_line = aln.match_line
+    #@seq0 = wrap(aln.get_sequence(0).to_s)
+    #
+    #@seq1 = wrap(aln.get_sequence(1).to_s)
+    @gene_name = params["gene_name"]
 
-    @seq1 = wrap(aln.get_sequence(1).to_s)
-    @title = ""
-
-    gtf = Bio::GFF.new(File.open(File.join(params["data_dir"], params["exon_gtf"])))
+    #gtf = Bio::GFF.new(File.open(File.join(params["data_dir"], params["exon_gtf"])))
     #exons = gtf.records.select { |rec| rec.attributes["transcript_id"].gsub("\"", "") == seqid }
 
-    ref_seq = aln.alignment[params["seqid"]]
-    @aln_len = ref_seq.length
-
-    @exons = MultiAlignAnnotator.new().create_gapped_features(ref_seq, gtf.records)
-    p @exons
+    #ref_seq = aln.alignment[params["seqid"]]
+    #@aln_len = ref_seq.length
+    #
+    #@exons = MultiAlignAnnotator.new().create_gapped_features(ref_seq, gtf.records)
+    #p @exons
   end
 
   def wrap(seq)

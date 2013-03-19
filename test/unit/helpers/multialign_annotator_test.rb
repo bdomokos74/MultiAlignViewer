@@ -102,8 +102,8 @@ class MyTest < Test::Unit::TestCase
     ]
     result = MultiAlignAnnotator.new().create_gapped_features(seq, exons)
     assert_equal(1, result.length)
-    assert_equal(["exon_1", 0, 10],
-                 [result[0].name, result[0].start, result[0].end
+    assert_equal(["exon_1", 0, 9],
+                 [result[0][:name], result[0][:start], result[0][:end]
                  ])
   end
   def test_create_gapped_features_2
@@ -117,8 +117,8 @@ class MyTest < Test::Unit::TestCase
     ]
     result = MultiAlignAnnotator.new().create_gapped_features(seq, exons)
     assert_equal(1, result.length)
-    assert_equal(["exon_1", 0, 1],
-                 [result[0].name, result[0].start, result[0].end,
+    assert_equal(["exon_1", 0, 0],
+                 [result[0][:name], result[0][:start], result[0][:end],
                  ])
   end
   def test_create_gapped_features_3
@@ -133,9 +133,35 @@ class MyTest < Test::Unit::TestCase
     ]
     result = MultiAlignAnnotator.new().create_gapped_features(seq, exons)
     assert_equal(2, result.length)
-    assert_equal(["exon_1", 0, 1, "exon_2", 1, 4 ],
-                 [result[0].name, result[0].start, result[0].end,
-                 result[1].name, result[1].start, result[1].end
+    assert_equal(["exon_1", 0, 0, "exon_2", 1, 3 ],
+                 [result[0][:name], result[0][:start], result[0][:end],
+                 result[1][:name], result[1][:start], result[1][:end]
+                 ])
+  end
+
+  def test_create_features_1
+    exons = [
+        Bio::GFF::Record.new("SEQ\tSOURCE\texon\t1\t2"),
+        Bio::GFF::Record.new("SEQ2\tSOURCE\texon\t5\t7")
+    ]
+    result = MultiAlignAnnotator.new().create_features(exons)
+    assert_equal(2, result.length)
+    assert_equal(["exon_1", 0, 1, "exon_2", 2, 4 ],
+                 [result[0][:name], result[0][:start], result[0][:end],
+                  result[1][:name], result[1][:start], result[1][:end]
+                 ])
+  end
+  def test_create_features_2
+    exons = [
+        Bio::GFF::Record.new("SEQ\tSOURCE\texon\t2\t3"),
+        Bio::GFF::Record.new("SEQ2\tSOURCE\texon\t5\t7")
+    ]
+    result = MultiAlignAnnotator.new().create_features(exons)
+    assert_equal(2, result.length)
+    assert_equal(["exon_1", 0, 1, "exon_2", 2, 4 ],
+                 [result[0][:name], result[0][:start], result[0][:end],
+                  result[1][:name], result[1][:start], result[1][:end]
                  ])
   end
 end
+

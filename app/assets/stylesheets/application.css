@@ -45,7 +45,9 @@
 .ctrl {
     background-color: #f0f0f0;
 }
-
+.nodisp {
+    display: none;
+}
 
 /* ctl1*/
 #col1 {

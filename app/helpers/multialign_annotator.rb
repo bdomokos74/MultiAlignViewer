@@ -97,11 +97,26 @@ class MultiAlignAnnotator
       end
       gapped_feature = {:name => "exon_#{curr_feature+1}",
                                       :start => start_pos,
-                                      :end => curr_aligned_pos}
+                                      :end => curr_aligned_pos-1}
       result << gapped_feature
       curr_feature += 1
       start_pos = curr_aligned_pos
     end
     return result
   end
+
+  def create_features( features)
+    start_pos = 0
+    result = []
+    for i in (0..(features.length-1))
+      n = features[i].end.to_i - features[i].start.to_i
+      gapped_feature = {:name => "exon_#{i+1}",
+                        :start => start_pos,
+                        :end => start_pos+n}
+      result << gapped_feature
+      start_pos = start_pos+n+1
+    end
+    return result
+  end
+
 end

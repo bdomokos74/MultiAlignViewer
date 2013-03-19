@@ -15,7 +15,7 @@ class ExonsController < ApplicationController
     if params["reverse"]
       records.reverse!
     end
-    exons = MultiAlignAnnotator.new().create_gapped_features(ref_seq, records)
+    exons = MultiAlignAnnotator.new().create_features(records)
     respond_to do |format|
       format.json { render json: exons.to_json }
     end

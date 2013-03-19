@@ -1,4 +1,4 @@
-<%provide(:title, @title) %>
+<%=h content_for(:title, @gene_name) %>
 <div>
     <div class="header">
         <div class="exon">
@@ -9,7 +9,7 @@
         Exon5 <span class="exon_5">                 </span>
         Exon6 <span class="exon_6">                 </span>
         Exon7 <span class="exon_7">                 </span>
-        <span id="diff_color"> D</span>
+        <span id="diff_color"> Diff</span>
         </div>
         <br/>
         <div class="labels">
@@ -84,9 +84,6 @@
             <div id="footer">
                 <br/>
                 <br/>
-
-
-
                 <br/>
                 <br/>
             </div>
@@ -110,6 +107,13 @@
                     <span id="search_clear">Clear</span>
                     <span id="search_close">Close</span>
                 </div>
+            </div>
+            <div id="vars_to_persist" class="nodisp">
+                <div id="matchline" val=""></div>
+                <div id="start_pos_1" val=""></div>
+                <div id="start_pos_2" val=""></div>
+                <div id="start_pos_3" val=""></div>
+                <div id="start_pos_4" val=""></div>
             </div>
         </div>
     </div>
