@@ -1,17 +1,28 @@
 class SequencesController < ApplicationController
   def initialize
-    config_json = File.read(File.join(ENV["HOME"], "multialn_cfg.json"))
-    params = JSON.parse(config_json)
-    @data_dir = params["data_dir"]
-    @aln_file = params["aln_file"]
+    @data_dir = GlobalParam.find_by_key("data_dir").value
+    current = GlobalParam.find_by_key("current_alignment").value
+    alignment_record = Alignment.find_by_name(current)
+
+    @aln_file = File.join(alignment_record.dir, "#{alignment_record.name}_compare.aln")
+    @fa_file = @aln_file.gsub(/\.aln/, ".fa")
   end
 
   def show
+    fasta_names = []
+    Bio::FlatFile.foreach( File.join(@data_dir, @fa_file)) do |f|
+      fasta_names << f.definition.gsub(/ .*$/, "")
+    end
+
     aln = Bio::ClustalW::Report.new(File.read(File.join(@data_dir, @aln_file)))
     match_line = aln.match_line
+
     n = params[:id].to_i
-    seq = aln.get_sequence(n).to_s
-    seqname = aln.alignment.keys[n]
+    seqname = fasta_names[n]
+    idx = aln.alignment.keys.index(seqname)
+
+    seq = aln.get_sequence(idx).to_s
+
     p "param: #{params[:id]}"
     p @seq
     respond_to do |format|
@@ -21,13 +32,19 @@ class SequencesController < ApplicationController
   end
 
   def index
+    fasta_names = []
+    Bio::FlatFile.foreach( File.join(@data_dir, @fa_file)) do |f|
+      fasta_names << f.definition.gsub(/ .*$/, "")
+    end
+
     aln = Bio::ClustalW::Report.new(File.read(File.join(@data_dir, @aln_file)))
     match_line = aln.match_line
     names = aln.alignment.keys
+
     n = names.length
     seqs = []
     (0..(n-1)).each do |i|
-      seqs[i] = [names[i], aln.get_sequence(i).to_s, match_line]
+      seqs[i] = [fasta_names[i], aln.alignment[fasta_names[i]].to_s, match_line]
     end
 
     respond_to do |format|

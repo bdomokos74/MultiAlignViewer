@@ -1,10 +1,14 @@
 FirstProject::Application.routes.draw do
+  resources :alignments
+
   get "static_pages/alignment"
 
   resources :global_params
   resources :sequences
   #match 'sequences/:id' => 'sequences#show'
   match 'exons/:id' => 'exons#show'
+
+  get 'select/:id' => 'select_gene#select'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

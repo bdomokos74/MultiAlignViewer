@@ -2,15 +2,15 @@ require 'multialign_annotator'
 
 class StaticPagesController < ApplicationController
   def alignment
-    config_json = File.read(File.join(ENV["HOME"], "multialn_cfg.json"))
-    params = JSON.parse(config_json)
+    current = GlobalParam.find_by_key("current_alignment").value
+    alignment_record = Alignment.find_by_name(current)
 
     #aln = Bio::ClustalW::Report.new(File.read(File.join(params["data_dir"], params["aln_file"])))
     #@match_line = aln.match_line
     #@seq0 = wrap(aln.get_sequence(0).to_s)
     #
     #@seq1 = wrap(aln.get_sequence(1).to_s)
-    @gene_name = params["gene_name"]
+    @gene_name = alignment_record.name
 
     #gtf = Bio::GFF.new(File.open(File.join(params["data_dir"], params["exon_gtf"])))
     #exons = gtf.records.select { |rec| rec.attributes["transcript_id"].gsub("\"", "") == seqid }

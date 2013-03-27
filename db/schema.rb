@@ -11,13 +11,32 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130207001908) do
+ActiveRecord::Schema.define(:version => 20130320131945) do
+
+  create_table "alignments", :force => true do |t|
+    t.string   "name"
+    t.string   "dir"
+    t.string   "exon_gtf"
+    t.string   "seq_name"
+    t.boolean  "reverse"
+    t.string   "user_changes"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
 
   create_table "global_params", :force => true do |t|
     t.string   "key"
     t.string   "value"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "input_files", :force => true do |t|
+    t.string   "name"
+    t.string   "file_type"
+    t.integer  "alignment_id"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
 end

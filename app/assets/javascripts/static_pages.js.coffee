@@ -42,7 +42,7 @@ getExons= (e) ->
   exons = e
 
 setSeq= (seq, panelnum, seqname, exon_seq) ->
-  [result, nrow] = create_markup(seq, matchline, panelnum, exon_seq)
+  [result, nrow] = create_markup(seq, panelnum, matchline, exon_seq)
   $("\#panel_#{panelnum}").html(result)
   $("#rownum_var").text(nrow)
 
@@ -58,7 +58,7 @@ setSeq= (seq, panelnum, seqname, exon_seq) ->
   # set panel names
   $("\#seqname_#{panelnum}").html(seqname)
 
-create_markup= (seq, matchline, panelnum, exon_seq) ->
+create_markup= (seq, panelnum, matchline, exon_seq) ->
   nrow = 0
   chars_in_row = 0
   nuc_in_row = 0
@@ -82,7 +82,7 @@ create_markup= (seq, matchline, panelnum, exon_seq) ->
       if panelnum == 2
         if seq[(index-chars_in_row+1)..index] == Array(chars_in_row+1).join("-")
           inserted_rows[nrow] = true
-      if panelnum==2
+      if panelnum==1
         nuc_per_line[nrow] = nuc_in_row
       nrow += 1
       result = result + "</div><div id=\"panel_#{panelnum}_row_#{nrow}\">"
@@ -114,16 +114,24 @@ color_codons= (tag, orf, panelnum) ->
   i += orf-1
   pos = 1
   while i < n
-    while $("\##{tag}_#{i}") is undefined or $("\##{tag}_#{i}").text()=="-"
+    while $("\##{tag}_#{i}") is undefined or $("\##{tag}_#{i}").text()=="-" or $("\##{tag}_#{i}").text()==" "
       i += 1
     nuc = $("\##{tag}_#{i}").text()
     buffer = buffer[1]+buffer[2]+nuc
     if pos % 3 == 0
       if buffer in start_codons
+        $("\##{tag}_#{i-2}").removeClass()
+        $("\##{tag}_#{i-1}").removeClass()
+        $("\##{tag}_#{i}").removeClass()
+
         $("\##{tag}_#{i-2}").addClass("codon_start_col")
         $("\##{tag}_#{i-1}").addClass("codon_start_col")
         $("\##{tag}_#{i}").addClass("codon_start_col")
       if buffer in stop_codons
+        $("\##{tag}_#{i-2}").removeClass()
+        $("\##{tag}_#{i-1}").removeClass()
+        $("\##{tag}_#{i}").removeClass()
+
         $("\##{tag}_#{i-2}").addClass("codon_stop_col")
         $("\##{tag}_#{i-1}").addClass("codon_stop_col")
         $("\##{tag}_#{i}").addClass("codon_stop_col")
@@ -170,7 +178,7 @@ color_signals= (tag, panelnum, sig_arr=utr3_signals, sig_class="signal_col") ->
 copy_matching= () ->
   for i in [0..(matching_rows.length)]
     if not inserted_rows[i]
-      $("#result_#{i}").html(copy_row(2, i))
+      $("#result_#{i}").html(copy_row(1, i))
   tag = "result_nuc"
   i = 0
   while $("\##{tag}_#{i}") is undefined or $("\##{tag}_#{i}").text()=="-"
@@ -194,7 +202,9 @@ create_position_bar= (nrow) ->
   for i in [0..(nrow)]
     position_str += "<div class=\"exon_bar\">#{sum+1}<span class=\"exon_#{curr_exon+1}\"> </span><span> </span></div>\n"
     sum += nuc_per_line[i]
-    if sum > exons[curr_exon]["end"]
+    if sum > exons[curr_exon]["end"] and curr_exon < exons.length-1
+      console.log sum
+      console.log curr_exon
       curr_exon += 1
   position_str
 
@@ -378,10 +388,10 @@ $(document).ready ->
 
   create_exon_splits()
 
-  setSeq(seq1, 1, seqname1, seq2)
-  setSeq(seq2, 2, seqname2, seq2)
+  setSeq(seq1, 1, seqname1, seq1)
+  setSeq(seq2, 2, seqname2, seq1)
   if seq3 != ""
-    setSeq(seq3, 3, seqname3, seq2)
+    setSeq(seq3, 3, seqname3, seq1)
 
   result = create_position_bar(nuc_per_line.length-1)
   $("#position_bar").html(result)
@@ -413,70 +423,70 @@ $(document).ready ->
   $("#orf1_result").click (evt) ->
     highlight_menu(evt.currentTarget)
     clear_colors("result_panel")
-    color_codons("result_nuc", 1, 4)
     color_signals("result_nuc", 4)
+    color_codons("result_nuc", 1, 4)
     color_changes()
     console.log start_positions
   $("#orf2_result").click (evt) ->
     highlight_menu(evt.currentTarget)
     clear_colors("result_panel")
-    color_codons("result_nuc", 2, 4)
     color_signals("result_nuc", 4)
+    color_codons("result_nuc", 2, 4)
     color_changes()
   $("#orf3_result").click (evt) ->
     highlight_menu(evt.currentTarget)
     clear_colors("result_panel")
-    color_codons("result_nuc", 3, 4)
     color_signals("result_nuc", 4)
+    color_codons("result_nuc", 3, 4)
     color_changes()
 
   $("#orf1_col1").click (evt) ->
     highlight_menu(evt.currentTarget)
     clear_colors("panel_1")
-    color_codons("panel_1_nuc", 1, 1)
     color_signals("panel_1_nuc", 1)
+    color_codons("panel_1_nuc", 1, 1)
   $("#orf2_col1").click (evt)->
     highlight_menu(evt.currentTarget)
     clear_colors("panel_1")
-    color_codons("panel_1_nuc", 2, 1)
     color_signals("panel_1_nuc", 1)
+    color_codons("panel_1_nuc", 2, 1)
   $("#orf3_col1").click (evt)->
     highlight_menu(evt.currentTarget)
     clear_colors("panel_1")
-    color_codons("panel_1_nuc", 3, 1)
     color_signals("panel_1_nuc", 1)
+    color_codons("panel_1_nuc", 3, 1)
 
   $("#orf1_col2").click (evt) ->
     highlight_menu(evt.currentTarget)
     clear_colors("panel_2")
-    color_codons("panel_2_nuc", 1, 2)
     color_signals("panel_2_nuc", 2)
+    color_codons("panel_2_nuc", 1, 2)
   $("#orf2_col2").click (evt) ->
     highlight_menu(evt.currentTarget)
     clear_colors("panel_2")
-    color_codons("panel_2_nuc", 2, 2)
     color_signals("panel_2_nuc", 2)
+    color_codons("panel_2_nuc", 2, 2)
   $("#orf3_col2").click (evt) ->
     highlight_menu(evt.currentTarget)
     clear_colors("panel_2")
-    color_codons("panel_2_nuc", 3, 2)
     color_signals("panel_2_nuc", 2)
+    color_codons("panel_2_nuc", 3, 2)
 
   $("#orf1_col3").click (evt) ->
     highlight_menu(evt.currentTarget)
     clear_colors("panel_3")
-    color_codons("panel_3_nuc", 1, 3)
     color_signals("panel_3_nuc", 3)
+    color_codons("panel_3_nuc", 1, 3)
   $("#orf2_col3").click (evt) ->
     highlight_menu(evt.currentTarget)
     clear_colors("panel_3")
-    color_codons("panel_3_nuc", 2, 3)
     color_signals("panel_3_nuc", 3)
+    color_codons("panel_3_nuc", 2, 3)
   $("#orf3_col3").click (evt) ->
     highlight_menu(evt.currentTarget)
     clear_colors("panel_3")
-    color_codons("panel_3_nuc", 3, 3)
     color_signals("panel_3_nuc", 3)
+    color_codons("panel_3_nuc", 3, 3)
 
   $("#diff_color").click ->
     $("#menu_line td span").removeClass()

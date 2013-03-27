@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @alignment.name %>
+</p>
+
+<p>
+  <b>Dir:</b>
+  <%= @alignment.dir %>
+</p>
+
+<p>
+  <b>Exon gtf:</b>
+  <%= @alignment.exon_gtf %>
+</p>
+
+<p>
+  <b>Seq name:</b>
+  <%= @alignment.seq_name %>
+</p>
+
+<p>
+  <b>Reverse:</b>
+  <%= @alignment.reverse %>
+</p>
+
+<p>
+  <b>Changes:</b>
+  <%= @alignment.changes %>
+</p>
+
+
+<%= link_to 'Edit', edit_alignment_path(@alignment) %> |
+<%= link_to 'Back', alignments_path %>

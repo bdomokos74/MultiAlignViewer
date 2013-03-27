@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  dir: MyString
+  exon_gtf: MyString
+  seq_name: MyString
+  reverse: false
+  changes: MyString
+
+two:
+  name: MyString
+  dir: MyString
+  exon_gtf: MyString
+  seq_name: MyString
+  reverse: false
+  changes: MyString

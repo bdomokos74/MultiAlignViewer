@@ -1,0 +1,41 @@
+<%= form_for(@alignment) do |f| %>
+  <% if @alignment.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@alignment.errors.count, "error") %> prohibited this alignment from being saved:</h2>
+
+      <ul>
+      <% @alignment.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :dir %><br />
+    <%= f.text_field :dir %>
+  </div>
+  <div class="field">
+    <%= f.label :exon_gtf %><br />
+    <%= f.text_field :exon_gtf %>
+  </div>
+  <div class="field">
+    <%= f.label :seq_name %><br />
+    <%= f.text_field :seq_name %>
+  </div>
+  <div class="field">
+    <%= f.label :reverse %><br />
+    <%= f.check_box :reverse %>
+  </div>
+  <div class="field">
+    <%= f.label :changes %><br />
+    <%= f.text_field :changes %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

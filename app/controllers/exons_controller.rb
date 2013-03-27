@@ -4,15 +4,20 @@ require 'json'
 class ExonsController < ApplicationController
 
   def show
-    config_json = File.read(File.join(ENV["HOME"], "multialn_cfg.json"))
-    params = JSON.parse(config_json)
+    data_dir = GlobalParam.find_by_key("data_dir").value
+    current = GlobalParam.find_by_key("current_alignment").value
+    alignment_record = Alignment.find_by_name(current)
+    p "current aln: #{current}"
 
-    aln = Bio::ClustalW::Report.new(File.read(File.join(params["data_dir"], params["aln_file"])))
-    gtf = Bio::GFF.new(File.open(File.join(params["data_dir"], params["exon_gtf"])))
-    ref_seq = aln.alignment[params["seqid"]]
+    #aln_filename = File.join(data_dir, alignment_record.dir, "#{alignment_record.name}_multi_2.aln")
+    #aln = Bio::ClustalW::Report.new(aln_filename)
+
+    gtf_filename = File.join(data_dir, alignment_record.dir, alignment_record.exon_gtf)
+    gtf = Bio::GFF.new(File.open(gtf_filename))
+    #ref_seq = aln.alignment[alignment_record.seq_name]
 
     records = gtf.records
-    if params["reverse"]
+    if alignment_record.reverse
       records.reverse!
     end
     exons = MultiAlignAnnotator.new().create_features(records)

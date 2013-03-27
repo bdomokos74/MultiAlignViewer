@@ -1,0 +1,33 @@
+<h1>Listing alignments</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Dir</th>
+    <th>Exon gtf</th>
+    <th>Seq name</th>
+    <th>Reverse</th>
+    <th>Changes</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @alignments.each do |alignment| %>
+  <tr>
+    <td><%= link_to alignment.name, "/select/#{alignment.name}" %></td>
+    <td><%= alignment.dir %></td>
+    <td><%= alignment.exon_gtf %></td>
+    <td><%= alignment.seq_name %></td>
+    <td><%= alignment.reverse %></td>
+    <td><%= alignment.changes %></td>
+    <td><%= link_to 'Show', alignment %></td>
+    <td><%= link_to 'Edit', edit_alignment_path(alignment) %></td>
+    <td><%= link_to 'Destroy', alignment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Alignment', new_alignment_path %>
