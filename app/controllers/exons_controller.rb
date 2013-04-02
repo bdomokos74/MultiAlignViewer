@@ -20,9 +20,27 @@ class ExonsController < ApplicationController
     if alignment_record.reverse
       records.reverse!
     end
-    exons = MultiAlignAnnotator.new().create_features(records)
+    p records
+    exons = create_features(records)
     respond_to do |format|
       format.json { render json: exons.to_json }
     end
+  end
+
+  def create_features( features)
+    start_pos = 0
+    result = []
+    features.each_with_index do |f, i|
+      n = f.end.to_i - f.start.to_i
+      if(n==0)
+        next
+      end
+      gapped_feature = {:name => "exon_#{i+1}",
+                        :start => start_pos,
+                        :end => start_pos+n}
+      result << gapped_feature
+      start_pos = start_pos+n+1
+    end
+    return result
   end
 end

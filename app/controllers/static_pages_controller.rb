@@ -4,6 +4,7 @@ class StaticPagesController < ApplicationController
   def alignment
     current = GlobalParam.find_by_key("current_alignment").value
     alignment_record = Alignment.find_by_name(current)
+    @aln_id = alignment_record.id
 
     #aln = Bio::ClustalW::Report.new(File.read(File.join(params["data_dir"], params["aln_file"])))
     #@match_line = aln.match_line

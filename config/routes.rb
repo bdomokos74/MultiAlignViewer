@@ -1,6 +1,8 @@
 FirstProject::Application.routes.draw do
-  resources :alignments
-  
+  resources :alignments do
+    get 'change'
+  end
+
   get "static_pages/alignment"
 
   resources :global_params

@@ -85,23 +85,20 @@ class UIPanel
 
   set_highlight_cbs: ->
     $("\#orf1_col#{@panelnum}").click (evt) =>
-      @highlight_menu(evt.currentTarget)
-      @clear_colors()
-      @color_signals(@utr3_signals)
-      @color_codons(1)
-      @color_changes()
-    $("#orf2_col#{@panelnum}").click (evt)=>
-      @highlight_menu(evt.currentTarget)
-      @clear_colors()
-      @color_signals(@utr3_signals)
-      @color_codons(2)
-      @color_changes()
-    $("#orf3_col#{@panelnum}").click (evt)=>
-      @highlight_menu(evt.currentTarget)
-      @clear_colors()
-      @color_signals(@utr3_signals)
-      @color_codons(3)
-      @color_changes()
+      @highlight_column( 1)
+    $("\#orf2_col#{@panelnum}").click (evt) =>
+      @highlight_column( 2)
+    $("\#orf3_col#{@panelnum}").click (evt) =>
+      @highlight_column( 3)
+
+  highlight_column: (orf) ->
+    console.log "highlighting: "+@panelnum+" orf="+orf
+    target = $("\#orf#{orf}_col#{@panelnum}")
+    @highlight_menu(target)
+    @clear_colors()
+    @color_signals(@utr3_signals)
+    @color_codons(orf)
+    @color_changes()
 
   init_empty_panel: (nrow) ->
     result_panel = ""
@@ -234,14 +231,19 @@ class UIPanel
         i += 1
 
   clear_colors: (cl) ->
-    console.log "\##{@panelname} div span"
-    $("\##{@panelname} div span").removeClass(cl)
+    if( cl? )
+      $("\##{@panelname} div span").removeClass(cl)
+    else
+      $("\##{@panelname} div span").removeClass()
 
   should_split_row: (seq, match, index, exon_pos) ->
-    return( (match[index] == ' ' and match[(index+1)..(index+37)] == Array(38).join("*")) or
+    result = ( (match[index] == ' ' and match[(index+1)..(index+37)] == Array(38).join("*")) or
     (match[index] == '*' and match[(index+1)..(index+37)] == Array(38).join(" ")) or
     exon_pos in ui.exon_splits
     )
+#    if(result)
+#      console.log "split: ["+match[index]+"], ["+match[(index+1)..(index+37)]+"], exonpos: "+exon_pos+" exon_splits:"+ui.exon_splits
+    return result
 
   color_differences: () ->
     match_arr = @ui.matchline.split ""
@@ -255,6 +257,15 @@ class UIPanel
     for c in exports.changes
       $(c[0]).text(c[1])
       $(c[0]).addClass("modified_col")
+
+  orf_selected: () ->
+    if($("\#orf1_col#{@panelnum}").hasClass("menusel_col"))
+      return 1
+    if($("\#orf2_col#{@panelnum}").hasClass("menusel_col"))
+      return 2
+    if($("\#orf3_col#{@panelnum}").hasClass("menusel_col"))
+      return 3
+    return 0
 
 class DiffUI
   constructor: () ->
@@ -271,16 +282,18 @@ class DiffUI
     @searchBox = ""
 
   initUI: () ->
-    @create_exon_splits()
-    seqname1 = alnData[0][0]
-    seqname2 = alnData[1][0]
-    seq1 = alnData[0][1]
-    seq2 = alnData[1][1]
-    if alnData.length > 2
-      seqname3 = alnData[2][0]
-      seq3 = alnData[2][1]
-    @matchline = alnData[0][2]
+    seqname1 = alnData.seqs[0][0]
+    seqname2 = alnData.seqs[1][0]
+    seq1 = alnData.seqs[0][1]
+    seq2 = alnData.seqs[1][1]
+    if alnData.seqs.length > 2
+      seqname3 = alnData.seqs[2][0]
+      seq3 = alnData.seqs[2][1]
+    @matchline = alnData.seqs[0][2]
+    changes = alnData.changes
     @exons = exonData
+
+    @create_exon_splits()
 
     @panel1 = new UIPanel("panel_1", 1, seqname1, seq1, this)
     @panel1.initPanel(seq1, @matchline)
@@ -292,11 +305,22 @@ class DiffUI
     @result_panel = new UIPanel("result_panel", 4, "result", "", this)
     @result_panel.init_empty_panel(@panel1.nuc_per_line.length)
 
-    @copy_matching()
-    @panel1.color_differences(@matchline)
-    @panel2.color_differences(@matchline)
-    @panel3.color_differences(@matchline)
-    @result_panel.color_differences(@matchline)
+    console.log "changes="+changes
+    if changes? and changes != ""
+      console.log "restoring"
+      @restore(JSON.parse(changes))
+    else
+      console.log "copying"
+      @copy_matching()
+
+    if(@panel1.orf_selected()==0)
+      @panel1.color_differences(@matchline)
+    if(@panel2.orf_selected()==0)
+      @panel2.color_differences(@matchline)
+    if(@panel3.orf_selected()==0)
+      @panel3.color_differences(@matchline)
+    if(@result_panel.orf_selected()==0)
+      @result_panel.color_differences(@matchline)
 
     @result_panel.set_highlight_cbs()
 
@@ -337,7 +361,26 @@ class DiffUI
       @result_panel.color_changes()
 
     $("#save_changes").click =>
-      console.log JSON.stringify(exports.cmd_history)
+      tmp_hist = exports.cmd_history
+      orf = @panel1.orf_selected()
+      if( orf !=0)
+        tmp_hist.push(["orf", 1, orf])
+      orf = @panel2.orf_selected()
+      if( orf !=0)
+        tmp_hist.push(["orf", 2, orf])
+      orf = @panel3.orf_selected()
+      if( orf !=0)
+        tmp_hist.push(["orf", 3, orf])
+      orf = @result_panel.orf_selected()
+      if( orf !=0)
+        tmp_hist.push(["orf", 4, orf])
+      $.ajax
+        url: "/alignments/"+$("#aln_id").attr("val")+"/change?user_changes="+JSON.stringify(tmp_hist)
+        success: (data) ->
+          alert "Changes saved."
+          console.log "Changes saved"
+        error: (data, txtstat, err) -> console.log err
+        async: false
 
     # JSON.parse
     @add_nuc_switcher()
@@ -367,12 +410,47 @@ class DiffUI
         console.log "#{@id} clicked, curr_row=#{curr_row}"
         $("\#result_#{curr_row}").html("<span>&nbsp;</span>")
 
+  restore: (commands) ->
+    orf_commands = []
+    for cmd in commands
+      if cmd[0] == "copy"
+        col = cmd[1]
+        row = cmd[2]
+        $("#result_#{row}").html(@copy_row(col, row))
+        exports.cmd_history.push(["copy", col, row])
+      else if cmd[0] == "change"
+        target = cmd[1]
+        newnuc = cmd[2]
+        obj = $("\##{target}")
+        $(obj).text(newnuc)
+        $(obj).addClass("modified_col")
+        exports.changes.push([obj, "T"])
+        exports.cmd_history.push(["change", obj.id, "T"])
+      else if cmd[0] == "orf"
+        orf_commands.push(cmd)
+
+    i = 0
+    while (i<@panel1.seq.length) and ($("\#result_panel_nuc_#{i}").text() == "" or $("\#result_panel_nuc_#{i}").text()=="-")
+      i += 1
+    @result_panel.start_position = i
+
+    for cmd in orf_commands
+      console.log "cmd: "+cmd
+      panel = @panel1
+      if( cmd[1] == 2)
+        panel = @panel2
+      else if( cmd[1] == 3)
+        panel = @panel3
+      else if( cmd[1] == 4)
+        panel = @result_panel
+      orf = cmd[2]
+      panel.highlight_column(orf)
+
   copy_matching: () ->
     n = @panel1.nuc_per_line.length
     for i in [0..(n)]
       if @panel1.match_per_line[i] / @panel1.nuc_per_line[i] > 0.8
         $("#result_#{i}").html(@copy_row(1, i))
-        console.log exports.cmd_history
         exports.cmd_history.push ["copy", 1, i]
     tag = @result_panel.panelname+"_nuc"
     i = 0
@@ -392,11 +470,11 @@ class DiffUI
 
   create_exon_splits: () ->
     n = @exons.length
-    console.log "len: "+n
     i = 0
     while i < n
-      exon_splits[i] = exons[i]["end"]
+      @exon_splits[i] = @exons[i]["end"]
       i += 1
+    console.log "len: "+n+" splits: "+@exon_splits
 
   show_result_seq: () ->
     console.log "save clicked"

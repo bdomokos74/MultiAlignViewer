@@ -1,4 +1,12 @@
 class AlignmentsController < ApplicationController
+  def change
+    alignment = Alignment.find(params[:alignment_id])
+    uc = params[:user_changes]
+    alignment.user_changes = uc
+    alignment.save
+    render :nothing => true
+  end
+
   # GET /alignments
   # GET /alignments.json
   def index

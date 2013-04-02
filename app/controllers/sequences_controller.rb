@@ -2,9 +2,8 @@ class SequencesController < ApplicationController
   def initialize
     @data_dir = GlobalParam.find_by_key("data_dir").value
     current = GlobalParam.find_by_key("current_alignment").value
-    alignment_record = Alignment.find_by_name(current)
-
-    @aln_file = File.join(alignment_record.dir, "#{alignment_record.name}_compare.aln")
+    @alignment_record = Alignment.find_by_name(current)
+    @aln_file = File.join(@alignment_record.dir, "#{@alignment_record.name}_compare.aln")
     @fa_file = @aln_file.gsub(/\.aln/, ".fa")
   end
 
@@ -48,7 +47,7 @@ class SequencesController < ApplicationController
     end
 
     respond_to do |format|
-      format.json { render json: seqs.to_json }
+      format.json { render json: {:changes => @alignment_record.user_changes, :seqs=> seqs}.to_json }
     end
   end
 end

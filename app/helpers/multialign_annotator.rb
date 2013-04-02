@@ -106,6 +106,13 @@ class MultiAlignAnnotator
   end
 
   def create_features( features)
+    p "FEATURELEN: "+features.length
+    if(features.length==1)
+      n = features[0].end.to_i - features[0].start.to_i
+      return [{:name => "exon_1",
+               :start => 0,
+               :end => n}]
+    end
     start_pos = 0
     result = []
     for i in (0..(features.length-1))

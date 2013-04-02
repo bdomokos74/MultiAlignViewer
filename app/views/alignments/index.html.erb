@@ -20,7 +20,7 @@
     <td><%= alignment.exon_gtf %></td>
     <td><%= alignment.seq_name %></td>
     <td><%= alignment.reverse %></td>
-    <td><%= alignment.changes %></td>
+    <td><%= alignment.user_changes[0,20] %></td>
     <td><%= link_to 'Show', alignment %></td>
     <td><%= link_to 'Edit', edit_alignment_path(alignment) %></td>
     <td><%= link_to 'Destroy', alignment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
